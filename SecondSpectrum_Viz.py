@@ -102,7 +102,7 @@ def plot_pitch( metadata, field_color ='green', linewidth=2, markersize=20):
     ax.set_axisbelow(True)
     return fig,ax
 
-def plot_frame( frame, metadata, figax=None, team_colors=('r','b'), PlayerMarkerSize=10, PlayerAlpha=0.7, annotate=False ):
+def plot_frame( frame, metadata, figax=None, team_colors=('r','b'), PlayerMarkerSize=10, PlayerAlpha=0.6, annotate=True ):
     """ plot_frame( hometeam, awayteam )
     
     Plots a frame of Metrica tracking data (player positions and the ball) on a football pitch. All distances should be in meters.
@@ -116,7 +116,7 @@ def plot_frame( frame, metadata, figax=None, team_colors=('r','b'), PlayerMarker
         field_dimen: tuple containing the length and width of the pitch in meters. Default is (106,68)
         PlayerMarkerSize: size of the individual player marlers. Default is 10
         PlayerAlpha: alpha (transparency) of player markers. Defaault is 0.7
-        annotate: Boolean variable that determines with player jersey numbers are added to the plot (default is False)
+        annotate: Boolean variable that determines with player jersey numbers are added to the plot (default is True)
         
     Returrns
     -----------
@@ -124,18 +124,18 @@ def plot_frame( frame, metadata, figax=None, team_colors=('r','b'), PlayerMarker
 
     """
     if figax is None: # create new pitch 
-        fig,ax = plot_pitch( field_dimen= (metadata['pitchLength'],metadata['pitchWidth']) )
+        fig,ax = plot_pitch( metadata  )
     else: # overlay on a previously generated pitch
         fig,ax = figax # unpack tuple
     # plot home & away teams in order
     for p in frame.homePlayers:
         ax.plot( p['xyz'][0], p['xyz'][1], team_colors[0]+'o', alpha=PlayerAlpha, MarkerSize=PlayerMarkerSize)
         if annotate:
-            ax.text( p['xyz'][0], p['xyz'][1], str(p['number']), color=team_colors[0])
+            ax.text( p['xyz'][0]+0.5, p['xyz'][1]+0.5, str(p['number']), color=team_colors[0])
     for p in frame.awayPlayers:
         ax.plot( p['xyz'][0], p['xyz'][1], team_colors[1]+'o', alpha=PlayerAlpha, MarkerSize=PlayerMarkerSize)
         if annotate:
-            ax.text( p['xyz'][0], p['xyz'][1], str(p['number']), color=team_colors[0])
+            ax.text( p['xyz'][0]+0.5, p['xyz'][1]+0.5, str(p['number']), color=team_colors[1])
     if frame.live:
         ax.plot( frame.ball['xyz'][0], frame.ball['xyz'][1], 'o', markeredgecolor='k',markerfacecolor='c',markersize=4*max(1,np.sqrt(frame.ball['xyz'][2]/1.5)))
     

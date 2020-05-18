@@ -52,7 +52,6 @@ def calc_formations_during_period(team,frames,metadata,period_start,period_end,g
     min_possession_length_frames = int( min_possession_length_secs*metadata['fps'] )
     # find the start and end frames of each period in possession of the ball
     team_possessions_start, team_possessions_end = get_team_possession_frames(team,frames.lastTouch,frames.live,min_possession_length_frames)
-    print(len(team_possessions_start))
     # calculate the attacking formations, measured over all the individual possessions
     attack_formation = formation(team+'_attack',gk_number) # initialise formation object
     for pstart,pend in zip(team_possessions_start,team_possessions_end):
